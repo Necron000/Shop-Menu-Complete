@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: shop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shop
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:password}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    validate-migration-naming: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ${RABBIT_USER:guest}
+    password: ${RABBIT_PASSWORD:guest}
+    listener:
+      simple:
+        default-requeue-rejected: false
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:U6WVy3hXVbaUhc4ohCyEj1Lz5B0axYjSVerJLDGY51j}
+      expiration-minutes: 60
+  checkout:
+    # An AWAITING_PAYMENT order older than this is cancelled by
+    # AbandonedCheckoutSweeper. ISO-8601 durations.
+    abandon-after: PT24H
+    sweep-interval: PT1H
+    sweep-initial-delay: PT1M
+
+logging:
+  level:
+    org.hibernate.SQL: INFO
+    org.springframework.security: DEBUG
+
+iyzico:
+  api-key: ${IYZICO_API_KEY:your-sandbox-api-key}
+  secret-key: ${IYZICO_SECRET_KEY:your-sandbox-secret-key}
+  base-url: https://sandbox-api.iyzipay.com
+  callback-url: http://localhost:8080/api/checkout/callback
+  frontend-result-url: http://localhost:5173/order

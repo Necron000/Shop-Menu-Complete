@@ -1,0 +1,39 @@
+# This file shadows the main application.yml on the test classpath, so anything
+# the context needs without a code-side default has to be repeated here.
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    validate-migration-naming: true
+  rabbitmq:
+    listener:
+      simple:
+        # Must match the main config, or a failed message is requeued in a loop
+        # instead of being dead-lettered and the DLQ test would hang.
+        default-requeue-rejected: false
+
+app:
+  security:
+    jwt:
+      secret: test-jwt-secret-U6WVy3hXVbaUhc4ohCyEj1Lz5B0axYjSVerJLDGY51j
+      expiration-minutes: 60
+  checkout:
+    abandon-after: PT24H
+    # Effectively never during a test run; the sweep is driven directly instead.
+    sweep-interval: PT24H
+    sweep-initial-delay: PT24H
+
+# Dummy iyzico credentials so the context loads in tests. IyzicoConfig fails fast on
+# the "your-..." placeholders from the main application.yml; no test calls iyzico for
+# real, so any non-placeholder value will do.
+iyzico:
+  api-key: sandbox-test-api-key
+  secret-key: sandbox-test-secret-key
+  base-url: https://sandbox-api.iyzipay.com
+  callback-url: http://localhost:8080/api/checkout/callback
+  frontend-result-url: http://localhost:5173/order

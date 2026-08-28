@@ -1,0 +1,10 @@
+# Local-only secrets, git-ignored and outside the packaged jar.
+#
+# Spring Boot loads ./config/application.yml automatically on every run and it
+# takes precedence over the classpath application.yml, so no profile flag and no
+# environment variables are needed --- plain `.\mvnw.cmd spring-boot:run` picks
+# these up. Only the keys below are overridden; everything else still comes from
+# src/main/resources/application.yml.
+iyzico:
+  api-key: sandbox-FfeH1hLoUV718YXZdh8dkAdgbWv8NFfV
+  secret-key: sandbox-mIcEH7miXUierRzFDRnzDtnQ1LqXhrz4
