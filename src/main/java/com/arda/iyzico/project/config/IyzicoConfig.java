@@ -19,13 +19,6 @@ public class IyzicoConfig {
 
         log.info("iyzico configured against {} with api key {}...",
                 properties.baseUrl(), properties.apiKey().substring(0, 12));
-
-        // The callback URL is baked into every payment at initialize time and is
-        // opened by the BUYER's browser, not by our server -- so a localhost value
-        // works only for someone sitting at this machine. A remote buyer pays, gets
-        // sent to localhost:8080, and sees a connection error while the order sits
-        // at AWAITING_PAYMENT forever. Print it on every boot, and shout when it
-        // cannot possibly work for anyone else.
         log.info("iyzico callback-url        {}", properties.callbackUrl());
         log.info("iyzico frontend-result-url {}", properties.frontendResultUrl());
 
